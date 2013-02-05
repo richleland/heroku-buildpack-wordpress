@@ -57,15 +57,24 @@ $ heroku apps:open
 
 The buildpack bootstraps a Wordpress site using the [mchung/wordpress-on-heroku](http://github.com/mchung/wordpress-on-heroku) project template.  That repo contains everything required to run your own Wordpress site on Heroku.
 
-There are several files available in `setup` for configuring your new Wordpress site.
+There are several files available in `config` for configuring your new Wordpress site.
 
-* `wp-content` - Wordpress themes and plugins
-* `wp-config.php` - Wordpress configuration
-* `nginx.conf.erb` - Nginx configuration
-* `php-fpm.conf` - PHP-FPM configuration
-* `php.ini` - PHP configuration
+```
+└── config                # Your config files goes here.
+    ├── public            # The public directory
+    │   └── wp-content    # Wordpress themes and plugins
+    │       ├── plugins
+    │       └── themes
+    └── vendor            # Config files for vendored apps
+        ├── nginx
+        │   └── conf      # nginx.conf + your site.conf
+        └── php
+            └── etc       # php.ini & php-fpm.conf
+```
 
-Feel free to hack on these files.  For example, to remove the PHP-FPM status page at `/status.html`, delete the directive from `nginx.conf.erb`.  Themes and plugins can be added and deployed to the `setup/wp-content` directory.
+When you deploy Wordpress to Heroku, the `bin/compile` script will copy everything in `config` over to the main runtime folder (`/app`), overwriting the defaults with these config files.
+
+Feel free to hack on these files.  For example, to remove the PHP-FPM status page at `/status.html`, delete the directive from `nginx.conf.erb`.  Themes and plugins can be added and deployed to the `config/public/wp-content` directory.
 
 Whenever possible, I've pulled out hard coded settings from `wp-config.php` and made them available as a runtime environment variable. Now, as an owner, you may toggle those values using `heroku config:set`. Here's an incomplete list of settings:
 
@@ -76,7 +85,7 @@ Whenever possible, I've pulled out hard coded settings from `wp-config.php` and 
 
 Please refer to the documentation from Wordpress for details.
 
-> To set a config variable: `heroku config:set GOOG_UA_ID=UA=1234777-9`
+> To add a Heroku environemtn variable: `heroku config:set GOOG_UA_ID=UA=1234777-9`
 
 
 Finally, enabling and configuring the following Wordpress plugins will also speed up Wordpress on Heroku significantly.
@@ -109,7 +118,7 @@ CNAME www.marcchung.org -> proxy.herokuapp.com
 
 ### Adding a theme
 ```bash
-$ cp -r appply setup/wp-content/themes/
+$ cp -r appply config/public/wp-content/themes/
 $ git add .
 $ git commit -m "New theme"
 $ git push heroku master
@@ -117,7 +126,7 @@ $ git push heroku master
 
 ### Adding a plugin
 ```bash
-$ cp -r google-analytics setup/wp-content/plugins/
+$ cp -r google-analytics config/public/wp-content/plugins/
 $ git add .
 $ git commit -m "New plugin"
 $ git push heroku master
@@ -180,9 +189,9 @@ $ git pull --rebase upstream master
 
 ## How fast is this?
 
-Pretty freaking fast. Here are some benchmarks from Google PageSpeed, Blitz.io, and Web Page Test.
+Pretty freaking fast.
 
-System setup:
+System setup
 * Single Heroku dyno
 * Default Wordpress installation
 * Default twentytwelve theme
@@ -190,7 +199,7 @@ System setup:
 * Cron disabled
 * Memcachier + ClearDB
 
-I periodically rerun these tests on [Wordpress on Heroku](http://wordpress-on-heroku.herokuapp.com).
+Here are some benchmarks from Google PageSpeed, Blitz.io, and Web Page Test.
 
 ### Google PageSpeed
 
@@ -214,6 +223,8 @@ Over 200 page views per second with less than 100ms response time sustained over
 
 [See the WebPageTest report](http://www.webpagetest.org/result/130201_BB_624/)
 
+I periodically rerun these tests on [Wordpress on Heroku](http://wordpress-on-heroku.herokuapp.com).
+
 ## But doesn't Heroku only run Ruby applications?
 
 Not anymore. Heroku's latest offerings (See [Celadon Cedar stack](http://devcenter.heroku.com/articles/cedar)) makes it easy (well, easyish) for developers to install and run any language, or service.
@@ -223,11 +234,11 @@ Not anymore. Heroku's latest offerings (See [Celadon Cedar stack](http://devcent
 The [ephemeral filesystem](http://devcenter.heroku.com/articles/dyno-isolation)
 
 * End-users cannot upload media assets to Heroku. WORKAROUND: Enable `wpro` and use that plugin to upload media assets to S3 instead.
-* End-users cannot update themes or plugins from the admin page. WORKAROUND: Add them to `setup/wp-content/themes` or `setup/wp-content/plugins` then push to Heroku.
+* End-users cannot update themes or plugins from the admin page. WORKAROUND: Add them to `config/public/wp-content/themes` or `config/public/wp-content/plugins` then push to Heroku.
 
 ## Security disclosure
 
-Each time Wordpress is deployed, Heroku will fetch the latest buildpack from GitHub and execute the instructions in `compile` and `deploy`.  This buildpack will download the latest precompiled versions of Nginx, PHP, and Wordpress from my personal [S3 bucket](http://heroku-buildpack-wordpress.s3.amazonaws.com) then add in config files from the [`setup`](https://github.com/mchung/wordpress-on-heroku/tree/master/setup) directory.
+Each time Wordpress is deployed, Heroku will fetch the latest buildpack from GitHub and execute the instructions in `compile` and `deploy`.  This buildpack will download the latest precompiled versions of Nginx, PHP, and Wordpress from my personal [S3 bucket](http://heroku-buildpack-wordpress.s3.amazonaws.com) then add in config files from the [`config`](https://github.com/mchung/wordpress-on-heroku/tree/master/config) directory.
 
 ## Hacking and Contributing
 
@@ -240,10 +251,9 @@ Not comfortable downloading and running a copy of someone else's PHP or Nginx ex
 ## TODO
 
 * Automate vendor upgrades. Make it easy to keep in sync with latest Nginx, PHP, and Wordpress.
-* End-users shouldn't be able to do things that aren't supported on Heroku.
+* End-users shouldn't be able to do things that aren't supported on Heroku. Write plugins to hide everything.
 * Integrate New Relic.
 * CDN support.
-* Intuitive project template layout.
 
 ## Authors and Contributors
 
