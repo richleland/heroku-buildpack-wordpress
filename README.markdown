@@ -17,7 +17,7 @@ You can see a live demo at [Wordpress on Heroku](http://wordpress-on-heroku.hero
 
 Fork this [Wordpress project template](http://github.com/mchung/wordpress-on-heroku).
 
-Clone the repository
+Clone the repository.
 ```bash
 $ git clone git://github.com/username/wordpress-on-heroku.git myblog
 ```
@@ -30,7 +30,7 @@ $ heroku config:add BUILDPACK_URL=https://github.com/mchung/heroku-buildpack-wor
 ```
 > Don't have the Heroku Toolbelt installed? Follow these [quickstart instructions](https://devcenter.heroku.com/articles/quickstart). Takes about 2 minutes.
 
-Deploy your Wordpress site to Heroku
+Deploy your Wordpress site to Heroku.
 ```bash
 $ git push heroku master
 ...
@@ -47,7 +47,7 @@ $ git push heroku master
 -----> Launching... done, v7
 ```
 
-Open your new Wordpress site in a web browser
+Open your new Wordpress site in a web browser.
 ```bash
 $ heroku apps:open
 ```
