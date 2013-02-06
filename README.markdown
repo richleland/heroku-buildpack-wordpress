@@ -136,7 +136,7 @@ $ git push heroku master
 ### Configuring cron
 By default, wp-cron is fired on every page load and scheduled to run jobs like future posts or backups.  This buildpack disables wp-cron so that visitors don't have to wait to see the site.
 
-Heroku allows you to trigger wp-cron from their scheduler
+Heroku allows you to trigger wp-cron from their scheduler.
 ```bash
 $ heroku addons:add scheduler:standard
 
@@ -144,7 +144,7 @@ $ heroku addons:add scheduler:standard
 ./cron.sh
 ```
 
-Alternatively, you may also re-enable wp-cron
+Alternatively, you may also re-enable wp-cron.
 ```bash
 $ heroku config:set DISABLE_WP_CRON=false
 ```
@@ -174,7 +174,7 @@ $ git push heroku production:master
 # This keeps upstream changes separate from blog changes.
 ```
 
-Pull changes from upstream into `master`
+Pull changes from upstream into `master`.
 ```bash
 $ git co master
 $ git pull
@@ -182,7 +182,7 @@ $ git co production
 $ git merge master
 ```
 
-Pull changes from upstream into `production`
+Pull changes from upstream into `production`.
 ```bash
 $ git pull --rebase upstream master
 ```
@@ -213,7 +213,7 @@ Results from a blitz.io rush
 
 ![Blitz.io rush](https://s3.amazonaws.com/heroku-buildpack-wordpress/woh-blitz-details.png)
 
-Over 200 page views per second with less than 100ms response time sustained over a minute.
+Over 200 page views per second with less than 100ms response time sustained for a minute.
 
 [See the Blitz.io report](https://www.blitz.io/report/541eb908b4ef3eec8d9c2ce2293a85ca)
 
@@ -223,7 +223,7 @@ Over 200 page views per second with less than 100ms response time sustained over
 
 [See the WebPageTest report](http://www.webpagetest.org/result/130201_BB_624/)
 
-I periodically rerun these tests on [Wordpress on Heroku](http://wordpress-on-heroku.herokuapp.com).
+These tests are periodically rerun on [Wordpress on Heroku](http://wordpress-on-heroku.herokuapp.com).
 
 ## But doesn't Heroku only run Ruby applications?
 
@@ -254,6 +254,7 @@ Not comfortable downloading and running a copy of someone else's PHP or Nginx ex
 * End-users shouldn't be able to do things that aren't supported on Heroku. Write plugins to hide everything.
 * Integrate New Relic.
 * CDN support.
+* Combine CSS/JS files
 
 ## Authors and Contributors
 
